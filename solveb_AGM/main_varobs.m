@@ -2,30 +2,29 @@
 clear
 clc
 close all
-% flg_gendata = true(1);
-flg_gendata = false(1);
+flg_gendata = true(1);
+% flg_gendata = false(1);
 
 obsshape = 'clover'; %'ring' 'clover'
 lambdab = 0.5;
 nt = 16;
 nx = 64;
 
-filename = [obsshape,num2str(lambdab,'%.0e'),'_',num2str(nt),num2str(nx)];
 if flg_gendata
     gendata(obsshape,lambdab,nt,nx,nx);
-else
-    load(['../data/',filename,'.mat'])
 end
+filename = [obsshape,num2str(lambdab,'%.0e'),'_',num2str(nt),num2str(nx)];
+load(['../data/',filename,'.mat'])
 
-opts_gendata = [];
-opts_gendata.maxit = 3e3;
-opts_gendata.tol = 1e-6;
-opts_gendata.stepsize0 = 0.01;
-opts_gendata.stepmodif = 0.8;
-opts_gendata.submaxit = 5;
-opts_gendata.acc = true(1);
+% opts_gendata = [];
+% opts_gendata.maxit = 3e3;
+% opts_gendata.tol = 1e-6;
+% opts_gendata.stepsize0 = 0.01;
+% opts_gendata.stepmodif = 0.8;
+% opts_gendata.submaxit = 5;
+% opts_gendata.acc = true(1);
 
-filename = [obsshape,num2str(lambdab,'%.0e')];
+% filename = [obsshape,num2str(lambdab,'%.0e'),'_',num2str(nt),num2str(nx)];
 
 %% solve BLO for b
 b_true = proj_b(b_true);
@@ -126,26 +125,26 @@ for t = 1:T
 end
 t_run = toc;
 % diffb_rel_hist = diffb_rel_hist./sqrt(mean(b_true(:).^2));
-save(['results/',filename,'_N=',num2str(N),'_T=',num2str(T),'_K=',num2str(K)]);
+% save(['results/',filename,'_N=',num2str(N),'_T=',num2str(T),'_K=',num2str(K)]);
 fprintf('diffb rel: %f\n',diffb_rel_hist(end));
 %%
 fig=tiledlayout(1,1,'TileSpacing','Compact','Padding','Compact');
 nexttile    
 imshow(b_num,[]);
 title(['numerical b, T=',num2str(t),' K=',num2str(K)]);colormap default; colorbar
-exportgraphics(fig,['results/',filename,'_N=',num2str(N),'_T=',num2str(T),'_K=',num2str(K),'_numb.png'],'BackgroundColor','none')
+% exportgraphics(fig,['results/',filename,'_N=',num2str(N),'_T=',num2str(T),'_K=',num2str(K),'_numb.png'],'BackgroundColor','none')
 
 fig=tiledlayout(1,1,'TileSpacing','Compact','Padding','Compact');
 nexttile
 plot(t_hist,valD_hist,'linewidth',2);
 title('UL Objective');xlabel('UL iteration');ylabel('UL objective');
-exportgraphics(fig,['results/',filename,'_N=',num2str(N),'_T=',num2str(T),'_K=',num2str(K),'_ulobj.png'],'BackgroundColor','none')
+% exportgraphics(fig,['results/',filename,'_N=',num2str(N),'_T=',num2str(T),'_K=',num2str(K),'_ulobj.png'],'BackgroundColor','none')
 
 fig=tiledlayout(1,1,'TileSpacing','Compact','Padding','Compact');
 nexttile
 plot(diffb_rel_hist,'LineWidth',2);
 title('obs relative error');xlabel('UL iteration');
-exportgraphics(fig,['results/',filename,'_N=',num2str(N),'_T=',num2str(T),'_K=',num2str(K),'_diffb.png'],'BackgroundColor','none')
+% exportgraphics(fig,['results/',filename,'_N=',num2str(N),'_T=',num2str(T),'_K=',num2str(K),'_diffb.png'],'BackgroundColor','none')
 
 
 
